@@ -2,12 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net462;net451</TargetFrameworks>
+    <Version>1.1</Version>
+    <OutputPath>$(BaseOutputPath)</OutputPath>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-
+ 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="2.6.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.4" />
