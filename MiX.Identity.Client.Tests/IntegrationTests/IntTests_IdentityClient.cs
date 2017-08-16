@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IdentityModel.Client;
 using System.IdentityModel.Tokens.Jwt;
@@ -6,10 +6,10 @@ using System.Security.Claims;
 using System.Linq;
 using Shouldly;
 
-namespace MiX.Identity.Client.Tests
+namespace MiX.Identity.Client.Tests.IntegrationTests
 {
 	[TestClass]
-	public class UnitTest1
+	public class IntTests_IdentityClient
 	{
 		private static IdentityClient _client;
 		// Dev settings
