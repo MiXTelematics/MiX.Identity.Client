@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiX.Identity.Client", "MiX.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiX.Identity.Client.Tests", "MiX.Identity.Client.Tests\MiX.Identity.Client.Tests.csproj", "{1BABA63F-1AA5-4B6B-8D0E-E1CC2772DA29}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0C448EB0-7CA3-4AD1-AB36-5723445AD4A4}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\nuget.config = .nuget\nuget.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
