@@ -11,6 +11,7 @@ namespace MiX.Identity.Client.Tests.IntegrationTests
 	[TestClass]
 	public class IntTests_IdentityClient
 	{
+
 		private static IdentityClient _client;
 		// Dev settings
 		private static string username = "rootuser@mixtel.com";
