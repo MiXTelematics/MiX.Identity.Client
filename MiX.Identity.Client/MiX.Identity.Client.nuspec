@@ -10,7 +10,7 @@
     <description>Package Description</description>
     <releaseNotes />
     <copyright>Copyright 2017</copyright>
-    <licenseUrl>https://raw.githubusercontent.com/MiXTelematics/MiX.Integrate.Api.Client/master/License.txt</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/MiXTelematics/MiX.Identity.Client/master/License.txt</licenseUrl>
     <tags>MiX Identity Client</tags>
     <dependencies>
       <group targetFramework=".NETStandard1.6">
