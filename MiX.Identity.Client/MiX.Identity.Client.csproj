@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net462;net451</TargetFrameworks>
-    <Version>1.1</Version>
     <OutputPath>$(BaseOutputPath)</OutputPath>
+    <Version>1.0.0.1</Version>
+    <FileVersion>1.0.0.2</FileVersion>
+    <ProductVersion>1.0.0.3</ProductVersion>
   </PropertyGroup>
  
   <ItemGroup>
