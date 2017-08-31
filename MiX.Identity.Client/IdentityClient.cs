@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace MiX.Identity.Client
 {
-	public class IdentityClient
+	public class IdentityClient : IIdentityClient
 	{
 		private TokenClient _tokenClient;
 
