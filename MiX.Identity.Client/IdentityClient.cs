@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
 using IdentityModel.Client;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MiX.Identity.Client
 {
-	public class IdentityClient
+	public class IdentityClient : IIdentityClient
 	{
 		private TokenClient _tokenClient;
 
@@ -21,7 +20,6 @@ namespace MiX.Identity.Client
 					clientId,
 					secret);
 		}
-
 		public TokenResponse RequestToken(string username, string password, string scopes)
 		{
 			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
@@ -50,7 +48,7 @@ namespace MiX.Identity.Client
 		{
 			if (String.IsNullOrEmpty(token))
 			{
-				throw new ArgumentException("Required arguments: token");
+				throw new ArgumentException("Required arguments: refreshToken");
 			}
 
 			return new JwtSecurityToken(token);
@@ -60,11 +58,9 @@ namespace MiX.Identity.Client
 		{
 			if (response.IsError)
 			{
-				if (response.IsHttpError)
-					throw new Exception($"HTTP Error StatusCode: {response.HttpErrorStatusCode} Reason: {response.HttpErrorReason}");
-				else
-					throw new Exception($"Protocol error response: {response.Json}");
+				throw new Exception($"HttpStatusCode: {response.HttpStatusCode}, Error: {response.Error}");
 			}
 		}
+
 	}
 }

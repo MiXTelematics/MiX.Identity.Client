@@ -1,10 +1,9 @@
-﻿
-namespace MiX.Identity.Client
+﻿namespace MiX.Identity.Client
 {
 	public static class IDServerUrlHelper
-  {
+	{
 		public static string GetAuthorizeEndpoint(string baseAddress)
-		{ 
+		{
 			return baseAddress + "/connect/authorize";
 		}
 		public static string GetLogoutEndpoint(string baseAddress)
@@ -27,5 +26,5 @@ namespace MiX.Identity.Client
 		{
 			return baseAddress + "/connect/revocation";
 		}
-  }
+	}
 }
