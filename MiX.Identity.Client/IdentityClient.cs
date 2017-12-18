@@ -1,6 +1,7 @@
 ﻿using System;
 using IdentityModel.Client;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 
 namespace MiX.Identity.Client
 {
@@ -20,6 +21,7 @@ namespace MiX.Identity.Client
 					clientId,
 					secret);
 		}
+
 		public TokenResponse RequestToken(string username, string password, string scopes)
 		{
 			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
@@ -27,9 +29,21 @@ namespace MiX.Identity.Client
 				throw new ArgumentException("Required arguments: username, password, scopes");
 			}
 
-			TokenResponse reponse = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).Result;
-			CheckError(reponse);
-			return reponse;
+			TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
+			CheckError(response);
+			return response;
+		}
+
+		public async Task<TokenResponse> RequestTokenAsync(string username, string password, string scopes)
+		{
+			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: username, password, scopes");
+			}
+
+			TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
+			CheckError(response);
+			return response;
 		}
 
 		public TokenResponse RefreshToken(string refreshToken)
@@ -39,9 +53,21 @@ namespace MiX.Identity.Client
 				throw new ArgumentException("Required arguments: refreshToken");
 			}
 
-			TokenResponse reponse = _tokenClient.RequestRefreshTokenAsync(refreshToken).Result;
-			CheckError(reponse);
-			return reponse;
+			TokenResponse response = _tokenClient.RequestRefreshTokenAsync(refreshToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			CheckError(response);
+			return response;
+		}
+
+		public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
+		{
+			if (String.IsNullOrEmpty(refreshToken))
+			{
+				throw new ArgumentException("Required arguments: refreshToken");
+			}
+
+			TokenResponse response = await _tokenClient.RequestRefreshTokenAsync(refreshToken).ConfigureAwait(false);
+			CheckError(response);
+			return response;
 		}
 
 		public JwtSecurityToken DecodeToken(string token)
