@@ -2,6 +2,7 @@
 using IdentityModel.Client;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace MiX.Identity.Client
 {
@@ -19,7 +20,9 @@ namespace MiX.Identity.Client
 			_tokenClient = new TokenClient(
 					IDServerUrlHelper.GetTokenEndpoint(baseAddress),
 					clientId,
-					secret);
+					secret,
+					new HttpClientHandler(),
+					AuthenticationStyle.BasicAuthentication);
 		}
 
 		public TokenResponse RequestToken(string username, string password, string scopes)

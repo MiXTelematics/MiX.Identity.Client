@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.6;net462;net451</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.6;net462;net452</TargetFrameworks>
     <OutputPath>$(BaseOutputPath)</OutputPath>
     <Version>1.0.0.1</Version>
     <FileVersion>1.0.0.2</FileVersion>
@@ -9,7 +9,7 @@
   </PropertyGroup>
  
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="2.6.0" />
+    <PackageReference Include="IdentityModel" Version="3.8.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.4" />
   </ItemGroup>
 
