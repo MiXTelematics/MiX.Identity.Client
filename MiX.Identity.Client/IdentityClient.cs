@@ -10,18 +10,24 @@ namespace MiX.Identity.Client
 	{
 		private TokenClient _tokenClient;
 
-		public IdentityClient(string baseAddress, string clientId, string secret)
+		public IdentityClient(string baseAddress, string clientId, string secret) : this(baseAddress, clientId, secret, null)
+		{
+		}
+
+		public IdentityClient(string baseAddress, string clientId, string secret, HttpClientHandler httpClientHandler = null)
 		{
 			if (String.IsNullOrEmpty(baseAddress) || String.IsNullOrEmpty(clientId) || String.IsNullOrEmpty(secret))
 			{
 				throw new ArgumentException("Required arguments: baseAddress, clientId, secret");
 			}
 
+			if (httpClientHandler == null) httpClientHandler = new HttpClientHandler();
+
 			_tokenClient = new TokenClient(
 					IDServerUrlHelper.GetTokenEndpoint(baseAddress),
 					clientId,
 					secret,
-					new HttpClientHandler(),
+					httpClientHandler,
 					AuthenticationStyle.BasicAuthentication);
 		}
 
