@@ -6,10 +6,12 @@ namespace MiX.Identity.Client
 {
 	public interface IIdentityClient
 	{
-		TokenResponse RequestToken(string username, string password, string scopes);
-		Task<TokenResponse> RequestTokenAsync(string username, string password, string scopes);
+		TokenResponse RequestResourceOwnerPasswordToken(string username, string password, string scopes);
+		Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes);
 		TokenResponse RefreshToken(string refreshToken);
 		Task<TokenResponse> RefreshTokenAsync(string refreshToken);
 		JwtSecurityToken DecodeToken(string token);
+		TokenResponse RequestClientCredentialsToken(string scopes);
+		Task<TokenResponse> RequestClientCredentialsTokenAsync(string scopes);
 	}
 }
