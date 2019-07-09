@@ -31,7 +31,7 @@ namespace MiX.Identity.Client
 					AuthenticationStyle.BasicAuthentication);
 		}
 
-		public TokenResponse RequestResourceOwnerPasswordToken(string username, string password, string scopes)
+		public TokenResponse RequestToken(string username, string password, string scopes)
 		{
 			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
 			{
@@ -43,7 +43,7 @@ namespace MiX.Identity.Client
 			return response;
 		}
 
-		public async Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes)
+		public async Task<TokenResponse> RequestTokenAsync(string username, string password, string scopes)
 		{
 			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
 			{
@@ -95,6 +95,30 @@ namespace MiX.Identity.Client
 			{
 				throw new Exception($"HttpStatusCode: {response.HttpStatusCode}, Error: {response.Error}");
 			}
+		}
+
+		public TokenResponse RequestResourceOwnerPasswordToken(string username, string password, string scopes)
+		{
+			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: username, password, scopes");
+			}
+
+			TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
+			CheckError(response);
+			return response;
+		}
+
+		public async Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes)
+		{
+			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: username, password, scopes");
+			}
+
+			TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
+			CheckError(response);
+			return response;
 		}
 
 		public TokenResponse RequestClientCredentialsToken(string scopes)
