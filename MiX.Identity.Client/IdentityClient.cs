@@ -1,8 +1,8 @@
-﻿using System;
-using IdentityModel.Client;
+﻿using IdentityModel.Client;
+using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace MiX.Identity.Client
 {
@@ -95,6 +95,54 @@ namespace MiX.Identity.Client
 			{
 				throw new Exception($"HttpStatusCode: {response.HttpStatusCode}, Error: {response.Error}");
 			}
+		}
+
+		public TokenResponse RequestResourceOwnerPasswordToken(string username, string password, string scopes)
+		{
+			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: username, password, scopes");
+			}
+
+			TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
+			CheckError(response);
+			return response;
+		}
+
+		public async Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes)
+		{
+			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: username, password, scopes");
+			}
+
+			TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
+			CheckError(response);
+			return response;
+		}
+
+		public TokenResponse RequestClientCredentialsToken(string scopes)
+		{
+			if (String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: scopes");
+			}
+
+			TokenResponse response = _tokenClient.RequestClientCredentialsAsync(scopes).ConfigureAwait(false).GetAwaiter().GetResult();
+			CheckError(response);
+			return response;
+		}
+
+		public async Task<TokenResponse> RequestClientCredentialsTokenAsync(string scopes)
+		{
+			if (String.IsNullOrEmpty(scopes))
+			{
+				throw new ArgumentException("Required arguments: scopes");
+			}
+
+			TokenResponse response = await _tokenClient.RequestClientCredentialsAsync(scopes).ConfigureAwait(false);
+			CheckError(response);
+			return response;
 		}
 
 	}
