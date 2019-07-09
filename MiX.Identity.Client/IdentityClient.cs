@@ -28,7 +28,9 @@ namespace MiX.Identity.Client
 					clientId,
 					secret,
 					httpClientHandler,
-					AuthenticationStyle.BasicAuthentication);
+					AuthenticationStyle.PostValues);
+			 
+			_tokenClient.BasicAuthenticationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617;
 		}
 
 		public TokenResponse RequestToken(string username, string password, string scopes)
