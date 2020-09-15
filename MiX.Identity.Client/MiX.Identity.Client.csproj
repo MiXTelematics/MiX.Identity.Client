@@ -3,14 +3,21 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.6;net462;net452</TargetFrameworks>
     <OutputPath>$(BaseOutputPath)</OutputPath>
-    <Version>1.0.0.1</Version>
-    <FileVersion>1.0.0.2</FileVersion>
-    <ProductVersion>1.0.0.3</ProductVersion>
+    <Version>1.0.1.0</Version>
+    <FileVersion>1.0.1.0</FileVersion>
+    <ProductVersion>1.0.1.0</ProductVersion>
+	  <Title>MiX Identity Client</Title>
+	  <Authors>MiX Telematics</Authors>
+	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance> 
+	  <Description>The MiX.Identity.Client assembly implements a client library for accessing the MiX Identity Server Api to get authentication tokens to access the MiX.Integrate.API</Description>
+	  <Copyright>Copyright 2020</Copyright>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageTags>MiX Identity Client</PackageTags>
   </PropertyGroup>
  
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="3.8.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.4" />
+    <PackageReference Include="IdentityModel" Version="[3.8.0,4.0.0)" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="[5.1.4,5.4.0]" />
   </ItemGroup>
 
 </Project>
