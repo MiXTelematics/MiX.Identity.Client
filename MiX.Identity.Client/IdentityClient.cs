@@ -8,7 +8,7 @@ namespace MiX.Identity.Client
 {
 	public class IdentityClient : IIdentityClient
 	{
-		private TokenClient _tokenClient;
+		private readonly TokenClient _tokenClient;
 
 		public IdentityClient(string baseAddress, string clientId, string secret) : this(baseAddress, clientId, secret, null)
 		{
@@ -16,7 +16,7 @@ namespace MiX.Identity.Client
 
 		public IdentityClient(string baseAddress, string clientId, string secret, HttpClientHandler httpClientHandler = null)
 		{
-			if (String.IsNullOrEmpty(baseAddress) || String.IsNullOrEmpty(clientId) || String.IsNullOrEmpty(secret))
+			if (string.IsNullOrEmpty(baseAddress) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(secret))
 			{
 				throw new ArgumentException("Required arguments: baseAddress, clientId, secret");
 			}
@@ -24,42 +24,41 @@ namespace MiX.Identity.Client
 			if (httpClientHandler == null) httpClientHandler = new HttpClientHandler();
 
 			_tokenClient = new TokenClient(
-					IDServerUrlHelper.GetTokenEndpoint(baseAddress),
-					clientId,
-					secret,
-					httpClientHandler,
-					AuthenticationStyle.PostValues);
-			 
-			_tokenClient.BasicAuthenticationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617;
+				IDServerUrlHelper.GetTokenEndpoint(baseAddress),
+				clientId,
+				secret,
+				httpClientHandler,
+				AuthenticationStyle.PostValues) {BasicAuthenticationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617};
+
 		}
 
-		public TokenResponse RequestToken(string username, string password, string scopes)
-		{
-			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
-			{
-				throw new ArgumentException("Required arguments: username, password, scopes");
-			}
+		//public TokenResponse RequestToken(string username, string password, string scopes)
+		//{
+		//	if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
+		//	{
+		//		throw new ArgumentException("Required arguments: username, password, scopes");
+		//	}
 
-			TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
-			CheckError(response);
-			return response;
-		}
+		//	TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
+		//	CheckError(response);
+		//	return response;
+		//}
 
-		public async Task<TokenResponse> RequestTokenAsync(string username, string password, string scopes)
-		{
-			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
-			{
-				throw new ArgumentException("Required arguments: username, password, scopes");
-			}
+		//public async Task<TokenResponse> RequestTokenAsync(string username, string password, string scopes)
+		//{
+		//	if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
+		//	{
+		//		throw new ArgumentException("Required arguments: username, password, scopes");
+		//	}
 
-			TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
-			CheckError(response);
-			return response;
-		}
+		//	TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
+		//	CheckError(response);
+		//	return response;
+		//}
 
 		public TokenResponse RefreshToken(string refreshToken)
 		{
-			if (String.IsNullOrEmpty(refreshToken))
+			if (string.IsNullOrEmpty(refreshToken))
 			{
 				throw new ArgumentException("Required arguments: refreshToken");
 			}
@@ -71,7 +70,7 @@ namespace MiX.Identity.Client
 
 		public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
 		{
-			if (String.IsNullOrEmpty(refreshToken))
+			if (string.IsNullOrEmpty(refreshToken))
 			{
 				throw new ArgumentException("Required arguments: refreshToken");
 			}
@@ -101,7 +100,7 @@ namespace MiX.Identity.Client
 
 		public TokenResponse RequestResourceOwnerPasswordToken(string username, string password, string scopes)
 		{
-			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
 			{
 				throw new ArgumentException("Required arguments: username, password, scopes");
 			}
@@ -113,7 +112,7 @@ namespace MiX.Identity.Client
 
 		public async Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes)
 		{
-			if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(scopes))
+			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
 			{
 				throw new ArgumentException("Required arguments: username, password, scopes");
 			}
@@ -125,7 +124,7 @@ namespace MiX.Identity.Client
 
 		public TokenResponse RequestClientCredentialsToken(string scopes)
 		{
-			if (String.IsNullOrEmpty(scopes))
+			if (string.IsNullOrEmpty(scopes))
 			{
 				throw new ArgumentException("Required arguments: scopes");
 			}
@@ -137,7 +136,7 @@ namespace MiX.Identity.Client
 
 		public async Task<TokenResponse> RequestClientCredentialsTokenAsync(string scopes)
 		{
-			if (String.IsNullOrEmpty(scopes))
+			if (string.IsNullOrEmpty(scopes))
 			{
 				throw new ArgumentException("Required arguments: scopes");
 			}
