@@ -1,23 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputPath>$(BaseOutputPath)</OutputPath>
-    <Version>1.1.0.0</Version>
-    <FileVersion>1.1.0.0</FileVersion>
-    <ProductVersion>1.1.0.0</ProductVersion>
+    <Version>2.0.0.0</Version>
+    <FileVersion>2.0.0.0</FileVersion>
+    <ProductVersion>2.0.0.0</ProductVersion>
 	  <Title>MiX Identity Client</Title>
 	  <Authors>MiX Telematics</Authors>
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance> 
 	  <Description>The MiX.Identity.Client assembly implements a client library for accessing the MiX Identity Server APi</Description>
-	  <Copyright>Copyright 2021</Copyright>
+	  <Copyright>Copyright 2023</Copyright>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <PackageTags>MiX Identity Client</PackageTags>
   </PropertyGroup>
  
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="[3.10.10,4.0.0)" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+	  <PackageReference Include="System.Text.Json" Version="4.6.0" />
   </ItemGroup>
 
 </Project>

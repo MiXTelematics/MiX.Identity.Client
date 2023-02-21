@@ -1,18 +1,18 @@
-﻿using IdentityModel.Client;
-using System;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MiX.Identity.Client
 {
 	public class IdentityClient : IIdentityClient
 	{
-		private readonly TokenClient _tokenClient;
-
-		public IdentityClient(string baseAddress, string clientId, string secret) : this(baseAddress, clientId, secret, null)
-		{
-		}
+		private readonly HttpClient _client;
+		private readonly string _baseAddress;
+		private readonly string _clientId;
+		private readonly string _clientSecret;
 
 		public IdentityClient(string baseAddress, string clientId, string secret, HttpClientHandler httpClientHandler = null)
 		{
@@ -21,130 +21,106 @@ namespace MiX.Identity.Client
 				throw new ArgumentException("Required arguments: baseAddress, clientId, secret");
 			}
 
-			if (httpClientHandler == null) httpClientHandler = new HttpClientHandler();
+			_baseAddress = baseAddress;
+			_clientId = clientId;
+			_clientSecret = secret;
 
-			_tokenClient = new TokenClient(
-				IDServerUrlHelper.GetTokenEndpoint(baseAddress),
-				clientId,
-				secret,
-				httpClientHandler,
-				AuthenticationStyle.PostValues) {BasicAuthenticationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617};
-
+			_client = new HttpClient(httpClientHandler ?? new HttpClientHandler());
+			_client.DefaultRequestHeaders.Accept.Clear();
+			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.MEDIA_TYPE_APPLICATION_JSON));
 		}
 
-		//public TokenResponse RequestToken(string username, string password, string scopes)
-		//{
-		//	if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
-		//	{
-		//		throw new ArgumentException("Required arguments: username, password, scopes");
-		//	}
-
-		//	TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
-		//	CheckError(response);
-		//	return response;
-		//}
-
-		//public async Task<TokenResponse> RequestTokenAsync(string username, string password, string scopes)
-		//{
-		//	if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
-		//	{
-		//		throw new ArgumentException("Required arguments: username, password, scopes");
-		//	}
-
-		//	TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
-		//	CheckError(response);
-		//	return response;
-		//}
 
 		public TokenResponse RefreshToken(string refreshToken)
 		{
-			if (string.IsNullOrEmpty(refreshToken))
-			{
-				throw new ArgumentException("Required arguments: refreshToken");
-			}
-
-			TokenResponse response = _tokenClient.RequestRefreshTokenAsync(refreshToken).ConfigureAwait(false).GetAwaiter().GetResult();
-			CheckError(response);
-			return response;
+			return RefreshTokenAsync(refreshToken).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
-		public async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
+		public async Task<TokenResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
 		{
 			if (string.IsNullOrEmpty(refreshToken))
 			{
-				throw new ArgumentException("Required arguments: refreshToken");
+				throw new ArgumentException("Required arguments: username, password, scopes");
 			}
 
-			TokenResponse response = await _tokenClient.RequestRefreshTokenAsync(refreshToken).ConfigureAwait(false);
-			CheckError(response);
-			return response;
-		}
-
-		public JwtSecurityToken DecodeToken(string token)
-		{
-			if (String.IsNullOrEmpty(token))
+			var requestData = new Dictionary<string, string>
 			{
-				throw new ArgumentException("Required arguments: refreshToken");
-			}
+				{ Constants.IDENTITY_GRANT_TYPE, Constants.IDENTITY_REFRESH_TOKEN },
+				{ Constants.IDENTITY_REFRESH_TOKEN, refreshToken}
+			};
 
-			return new JwtSecurityToken(token);
+			return await GetTokenResponseAsync(requestData, cancellationToken).ConfigureAwait(false);
 		}
 
-		private void CheckError(TokenResponse response)
-		{
-			if (response.IsError)
-			{
-				throw new Exception($"HttpStatusCode: {response.HttpStatusCode}, Error: {response.Error}");
-			}
-		}
 
 		public TokenResponse RequestResourceOwnerPasswordToken(string username, string password, string scopes)
 		{
-			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
-			{
-				throw new ArgumentException("Required arguments: username, password, scopes");
-			}
-
-			TokenResponse response = _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
-			CheckError(response);
-			return response;
+			return RequestResourceOwnerPasswordTokenAsync(username, password, scopes).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
-		public async Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes)
+		public async Task<TokenResponse> RequestResourceOwnerPasswordTokenAsync(string username, string password, string scopes, CancellationToken cancellationToken = default)
 		{
 			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(scopes))
 			{
 				throw new ArgumentException("Required arguments: username, password, scopes");
 			}
 
-			TokenResponse response = await _tokenClient.RequestResourceOwnerPasswordAsync(username, password, scopes).ConfigureAwait(false);
-			CheckError(response);
-			return response;
+			var requestData = new Dictionary<string, string>
+			{
+				{ Constants.IDENTITY_GRANT_TYPE, Constants.IDENTITY_PASSWORD },
+				{ Constants.IDENTITY_USERNAME, username },
+				{ Constants.IDENTITY_PASSWORD, password },
+				{ Constants.IDENTITY_SCOPE, scopes }
+			};
+
+			return await GetTokenResponseAsync(requestData, cancellationToken).ConfigureAwait(false);
 		}
+
 
 		public TokenResponse RequestClientCredentialsToken(string scopes)
 		{
-			if (string.IsNullOrEmpty(scopes))
-			{
-				throw new ArgumentException("Required arguments: scopes");
-			}
-
-			TokenResponse response = _tokenClient.RequestClientCredentialsAsync(scopes).ConfigureAwait(false).GetAwaiter().GetResult();
-			CheckError(response);
-			return response;
+			return RequestClientCredentialsTokenAsync(scopes).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
-		public async Task<TokenResponse> RequestClientCredentialsTokenAsync(string scopes)
+		public async Task<TokenResponse> RequestClientCredentialsTokenAsync(string scopes, CancellationToken cancellationToken = default)
 		{
 			if (string.IsNullOrEmpty(scopes))
 			{
 				throw new ArgumentException("Required arguments: scopes");
 			}
 
-			TokenResponse response = await _tokenClient.RequestClientCredentialsAsync(scopes).ConfigureAwait(false);
-			CheckError(response);
-			return response;
+			var requestData = new Dictionary<string, string>
+			{
+				{ Constants.IDENTITY_GRANT_TYPE, Constants.IDENTITY_CLIENT_CREDENTIALS },
+				{ Constants.IDENTITY_SCOPE, scopes }
+			};
+
+			return await GetTokenResponseAsync(requestData, cancellationToken).ConfigureAwait(false);
 		}
 
+
+		private async Task<TokenResponse> GetTokenResponseAsync(IDictionary<string, string> fields, CancellationToken cancellationToken)
+		{
+			fields.Add(Constants.IDENTITY_CLIENT_ID, _clientId);
+			fields.Add(Constants.IDENTITY_CLIENT_SECRET, _clientSecret);
+
+			using (var request = new HttpRequestMessage(HttpMethod.Post, IDServerUrlHelper.GetTokenEndpoint(_baseAddress)){Content = new FormUrlEncodedContent(fields)})
+			{
+				using (var response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false))
+				{
+					string content = null;
+					if (response.Content != null)
+					{
+						content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+					}
+
+					var tokenResponse = new TokenResponse(response.StatusCode, response.ReasonPhrase, content);
+					if (!string.IsNullOrWhiteSpace(tokenResponse.Error))
+						throw new Exception($"HttpStatusCode: {tokenResponse.HttpStatusCode}, Error: {tokenResponse.Error}");
+
+					return tokenResponse;
+				}
+			}
+		}
 	}
 }
