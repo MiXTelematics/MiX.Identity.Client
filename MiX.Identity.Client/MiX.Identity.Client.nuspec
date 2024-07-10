@@ -9,14 +9,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance> 
     <description>The MiX.Identity.Client assembly implements a client library for retrieving authentication tokens from the MiX Identity Server API</description>
     <releaseNotes />
-    <copyright>Copyright 2023</copyright>
+    <copyright>Copyright 2024</copyright>
     <license type="expression">MIT</license>
     <tags>MiX Identity Client</tags>
     <dependencies>
 			<group targetFramework=".NETStandard2.0">
 				<dependency id="NETStandard.Library" version="2.0.3"  />
-				<dependency id="System.Text.Json" version="4.6.0"  />
-				<dependency id="System.Text.Encodings.Web" version="4.7.2"  />
+				<dependency id="System.Text.Json" version="8.0.4"  />
+				<dependency id="System.Text.Encodings.Web" version="8.0.0"  />
 			</group>
     </dependencies>
   </metadata>
